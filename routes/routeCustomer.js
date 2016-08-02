@@ -34,7 +34,12 @@ exports.getAllCustomers=function routeGetAllCustomersRequest(req, res, next) {
         if (err) {
             res.status(400).json(util.showMessage('error:' + err.name));
         } else {
-            res.status(200).json(customers);
+            
+            var resp = {
+                'total_count': customers.length,
+                'entries': customers
+            }
+            res.status(200).json(resp);
         }
     });
 }
@@ -43,11 +48,12 @@ exports.addCustomer=function routeCustomerInsertRequest(req, res, next) {
     
     var c_name = req.body.customer_name;
     var c_id = req.body.customer_id;
+    var c_folder_id = '5010309';
     
     if (c_name && c_id) {
         
         var customer = require("../model/customer");
-        var _customer = new customer({ customer_name: c_name});
+        var _customer = new customer({ customer_name: c_name,customer_id: c_id,box_root_folder_id: c_folder_id});
         
         _customer.save(function (err, userObj) {
             if (err) {
