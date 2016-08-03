@@ -260,11 +260,11 @@ router.post(basePath + '/customers', routeCustomer.addCustomer);
 router.get(basePath + '/customers/:customerId', routeCustomer.getCustomerById);
 
 
-router.post(basePath + '/projects', routeProject.addProject);//routeProjectSetupRequest);
-router.get(basePath + '/projects/:projectId', routeProject.getProjectById);
-router.get(basePath + '/projects', routeProject.getAllProjects);
+router.post(basePath + '/customers/:customerId/projects', routeProject.addProject);//routeProjectSetupRequest);
+router.get(basePath + '/customers/:customerId/projects/:projectId', routeProject.getProjectById);
+router.get(basePath + '/customers/:customerId/projects', routeProject.getAllProjects);
+
+
 router.get(basePath + '/projects/:projectId/notifications', routeProject.getNotificationsByProjId);
-
-
 
 module.exports = router;
