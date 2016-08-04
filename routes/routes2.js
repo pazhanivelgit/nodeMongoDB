@@ -5,6 +5,13 @@ var basePath = '/pw/v1';
 
 var routeCustomer = require('./routeCustomer');
 var routeProject = require('./routeProject');
+var routeNotifications = require('./routeNotifications');
+var routeProjectTeam = require('./routeProjectTeam');
+var routeCustomerTeam = require('./routeCustomerTeam');
+var routeGoals = require('./routeGoals');
+var routeStatus = require('./routeStatus');
+
+
 
 var exculdeFields = {
     __v: false,
@@ -265,6 +272,12 @@ router.get(basePath + '/customers/:customerId/projects/:projectId', routeProject
 router.get(basePath + '/customers/:customerId/projects', routeProject.getAllProjects);
 
 
-router.get(basePath + '/projects/:projectId/notifications', routeProject.getNotificationsByProjId);
+//router.get(basePath + '/projects/:projectId/notifications', routeProject.getNotificationsByProjId);
+router.get(basePath + '/customers/:customerId/projects/:projectId/notifications', routeNotifications.getNotificationsByProjID);
+router.get(basePath + '/customers/:customerId/projects/:projectId/project_team', routeProjectTeam.getProjectTeamByProjID);
+router.get(basePath + '/customers/:customerId/projects/:projectId/customer_team', routeCustomerTeam.getCustomerTeamByProjID);
+router.get(basePath + '/customers/:customerId/projects/:projectId/goals', routeGoals.getGoalsByProjID);
+router.get(basePath + '/customers/:customerId/projects/:projectId/status', routeStatus.getStatusByProjID);
+
 
 module.exports = router;

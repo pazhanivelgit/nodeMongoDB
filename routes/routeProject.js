@@ -177,16 +177,16 @@ exports.addProject=function routeProjectInsertRequest(req, res, next) {
     
     var cus_id = req.params.customerId;
     //var cus_name = req.body.customer_name;
-    var p_id = req.body.project_id;
+    var p_id = req.body.project_detail.project_id;
     var p_details = req.body.project_detail;
     var notification_list = req.body.notifications;
     var proj_team = req.body.project_team;
     var cus_team = req.body.customer_team;
     var _goals = req.body.goals;
-
+    var _status = req.body.status;
     
     if (p_details && notification_list) {
-        var _project = new project({customer_id: cus_id,project_id: p_id, project_detail: p_details, notifications: notification_list, project_team: proj_team,customer_team:cus_team,goals:_goals});
+        var _project = new project({customer_id: cus_id,project_id: p_id, project_detail: p_details, notifications: notification_list, project_team: proj_team,customer_team:cus_team,goals:_goals,status:_status});
         _project.save(function(err, userObj) {
             if (err) {
                 //console.log(err);
