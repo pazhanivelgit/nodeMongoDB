@@ -1,6 +1,7 @@
 ﻿var util = require('../public/util');
 var project = require("../model/project");
 var async = require('async');
+var logger = require("../public/logger");
 
 
 exports.getCustomerTeamByProjID = function getCustomerTeamByProjID(req, res, next) {
@@ -78,4 +79,33 @@ function asyncGetCustomerTeam(req, customer, callback) {
         callback({ name: 'Invalid params!' }, null);
     }
 }
+
+
+exports.updateCustomerTeam = function updateCustomerTeam(req,res,next){
+
+    logger.log('info', 'Update Customer team-Request-', JSON.stringify(req.body));
+    console.log("Update Customer Team request receieved");
+    var projectid = req.params.projectId;
+    var customerArray = req.body;
+    var id = parseInt(projectid);
+    var updatequery = {$set: { "customer_team": customerArray }};
+    var update_record = {
+        "project_id" : id
+    };
+
+    project.update(update_record,updatequery,function(err,projTeam){
+        if(err){
+            console.error("error updating",err);
+            res.status(500).json(err);
+
+        }else{
+            if(projTeam.n > 0){
+                res.status(200).json(util.showMessage('Customer team updated successfully'));
+            }else{
+                res.status(500).json(util.showMessage('No matching record found'));
+            }
+        }
+    }); 
+    
+};
 

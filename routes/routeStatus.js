@@ -1,6 +1,7 @@
 ﻿var util = require('../public/util');
 var project = require("../model/project");
 var async = require('async');
+var logger = require("../public/logger");
 
 
 exports.getStatusByProjID = function getStatusByProjID(req, res, next) {
@@ -55,6 +56,7 @@ function asyncGetStatus(req, customer, callback) {
         query.select('-_id project_detail status');
         query.exec(function (err, _status) {
             if (err) {
+                console.error(err);
                 callback(err, null);
             } else {
                 
@@ -81,3 +83,30 @@ function asyncGetStatus(req, customer, callback) {
     }
 }
 
+exports.updateStatus = function updateStatus(req,res,next){
+    logger.log('info', 'Update status-Request-', JSON.stringify(req.body));
+    console.log("UpdateGoals request receieved");
+    var projectid = req.params.projectId;
+    var statusArray = req.body;
+    var id = parseInt(projectid);
+    var updatequery = {$set: { "status": statusArray }};
+    var update_record = {
+        "project_id" : id
+    };
+
+    
+    project.update(update_record,updatequery,function(err,projstatus){
+        if(err){
+            console.error("error updating",err);
+            res.status(500).json(err);
+
+        }else{
+            if(projstatus.n > 0){
+                res.status(200).json(util.showMessage('Status updated successfully'));
+            }else{
+                res.status(500).json(util.showMessage('No matching record found'));
+            }
+        }
+    }); 
+    
+};

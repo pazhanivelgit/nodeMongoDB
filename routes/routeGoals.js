@@ -1,6 +1,7 @@
 ﻿var util = require('../public/util');
 var project = require("../model/project");
 var async = require('async');
+var logger = require("../public/logger");
 
 
 exports.getGoalsByProjID = function getGoalsByProjID(req, res, next) {
@@ -79,3 +80,32 @@ function asyncGetGoals(req, customer, callback) {
     }
 }
 
+
+exports.updateGoals = function updateGoals(req,res,next){
+
+    logger.log('info', 'Update goals-Request-', JSON.stringify(req.body));
+    console.log("UpdateGoals request receieved");
+    var projectid = req.params.projectId;
+    var goalArray = req.body;
+    var id = parseInt(projectid);
+    var updatequery = {$set: { "goals": goalArray }};
+    var update_record = {
+        "project_id" : id
+    };
+
+    
+    project.update(update_record,updatequery,function(err,projstatus){
+        if(err){
+            console.error("error updating",err);
+            res.status(500).json(err);
+
+        }else{
+            if(projstatus.n > 0){
+                res.status(200).json(util.showMessage('Goals updated successfully'));
+            }else{
+                res.status(500).json(util.showMessage('No matching record found'));
+            }
+        }
+    }); 
+    
+};

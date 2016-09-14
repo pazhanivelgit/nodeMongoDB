@@ -1,0 +1,54 @@
+                <div class="white-bg page-heading">
+                    <h2>{{message}}</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="#">Home</a> /
+                        </li>
+                        <li>
+                            <a href="#/custeamsetup"><span class="act-bc">Customer Team Setup</span></a>
+                        </li>
+                    </ol>
+                </div>
+				
+				
+				<div class="rows"> 
+				<div style="width:100%; float:left;" id="cussuccess" class="successmsg">&nbsp;</div> 				
+				
+                	<section class="cusset bor">
+                    	<form name="custeamform" ng-controller="customerteamsavecontroller">
+                            <div class="ngdialog-message">
+                                <h5>Add Customer Team Member</h5>
+                                <div class="lab"><label>Name <span class="mandit">*</span></label></div>
+                                <div class="fie">
+                                    <input type="text" name="cus_name" ng-model="cus_name" required />
+                                    <span ng-show="custeamform.cus_name.$touched && custeamform.cus_name.$invalid"> Name is required.</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="lab"><label>Email Address <span class="mandit">*</span></label></div>
+                                <div class="fie">
+                                    <input type="text" name="cus_email_address" ng-model="cus_email_address" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required />
+                                    <span ng-show="custeamform.cus_email_address.$touched && custeamform.cus_email_address.$invalid"> Email Id is required.</span>
+                                    <span style="color:Red" ng-show="custeamform.cus_email_address.$dirty && custeamform.cus_email_address.$error.pattern">Please Enter Valid Email</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="lab"><label>Role <span class="mandit">*</span></label></div>
+                                <div class="fie">
+                                    <select name="cus_role" ng-model="cus_role" required >
+                                        <option value="Executive">Executive</option>
+                                        <option value="Team Member">Team Member</option>
+                                    </select>
+									<span ng-show="custeamform.cus_role.$touched && custeamform.cus_role.$invalid"> Role is required.</span>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="lab">
+                                    <button class="def-btns" ng-click="savecustomermember()">Save</button>
+                                    <!--<button class="def-btns" ng-click="closeThisDialog()">Cancel</button>-->
+                                </div>
+                            </div>
+                            </form>
+                    </section>
+                
+                </form>
+                </div>
+				
+					

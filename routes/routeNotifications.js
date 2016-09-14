@@ -1,6 +1,7 @@
 ﻿var util = require('../public/util');
 var project = require("../model/project");
 var async = require('async');
+var logger = require("../public/logger");
 
 
 exports.getNotificationsByProjID = function getNotificationsByProjID(req, res, next) {
@@ -80,3 +81,96 @@ function asyncGetAllNotifications(req,customer, callback) {
     }
 }
 
+
+exports.updateNotifications = function updateNotifications(req,res,next){
+
+    logger.log('info', 'Update Notification-Request-', JSON.stringify(req.body));
+    console.log("UpdateNotifications request receieved");
+    var projectid = req.params.projectId;
+    var notificationArray = req.body;
+    var id = parseInt(projectid);
+    var updatequery = {$set: { "notifications": notificationArray }};
+    var update_record = {
+        "project_id" : id
+    };
+
+    project.update(update_record,updatequery,function(err,projnotif){
+        if(err){
+            console.error("error updating",err);
+            res.status(500).json(err);
+
+        }else{
+            if(projnotif.n > 0){
+                res.status(200).json(util.showMessage('Notification updated successfully'));
+            }else{
+                res.status(500).json(util.showMessage('No matching record found'));
+            }
+        }
+    }); 
+    
+};
+
+exports.addNotifications = function addNotifications(req,res,next){
+
+    logger.log('info', 'Add Notification-Request-', JSON.stringify(req.body));
+    var projectid = req.params.projectId;
+    var notificationObj = req.body;
+    var id = parseInt(projectid);
+
+    var update_record = {
+        "project_id" : id
+    };
+
+    var currentDate = new Date();
+    var day = currentDate.getDate();
+    var month = currentDate.getMonth() + 1;
+    var year = currentDate.getFullYear();
+    var date = day + "/" + month + "/" + year ;
+    notificationObj.date = date;
+    //console.log("notificationObj",notificationObj);
+
+    var updatequery = {
+                    $push: {
+                            "notifications": notificationObj
+                    }
+    };
+
+    project.update(update_record,updatequery,function(err,notif){
+            if(err){
+                //console.error("error updating",err);
+                logger.log('error', err.message);
+                var errobj = {
+
+                                  "isError": "true",
+                                  "errorCode": "110",                          
+                                  "message": err.message
+
+                            };
+                res.status(500).json(errobj);
+            }else{
+                //console.log("resp",notif);
+                logger.log('info', 'Updated successfully');
+                var obj = {
+
+                                  "isError": "false",                          
+                                  "message": "Notification added successfully"
+
+                            };
+                if(notif.n > 0){
+                    res.status(200).json(obj);
+                }else{
+                    var errobj = {
+
+                                  "isError": "true",
+                                  "errorCode": "111",                          
+                                  "message": "No matching record found"
+
+                        };
+                    res.status(500).json(errobj);
+                }
+                
+            }
+    } );
+
+
+};

@@ -13,7 +13,13 @@ var project_schema = new mongoose.Schema(
             schedule_url: String,
             budget_url: String,
             goals_url: String,
-            box_root_folder_id: String
+            box_folder_id: String
+        },
+        box_logs:{
+        exec_only_folder_id: String,
+        all_users_folder_id: String,
+        exec_only_group_id: String,
+        all_users_group_id: String
         },
         notifications: [
             {
@@ -21,7 +27,13 @@ var project_schema = new mongoose.Schema(
                 date: String,
                 link: String,
                 text: String,
-                icon_type:String
+                icon_type:String,
+                activity_type : String,
+				location : String,
+                postedby : {
+                    username : String,
+                    userimage : String
+                }
             }
         ],
         project_team: [
@@ -32,7 +44,11 @@ var project_schema = new mongoose.Schema(
                 photograph: String,
                 title: String,
                 phone_number: String,
-                group:String
+                group: String,
+                box_app_user_id: String,
+                box_group_membership_id: String,
+				user_id: String,
+                box_collaboration_id: String
             }
         ],
         customer_team: [
@@ -41,7 +57,9 @@ var project_schema = new mongoose.Schema(
                 auth0_user_id: String,
                 email_address: String,
                 role: String,
-                box_app_user_id:String
+                box_app_user_id:String,
+                box_group_membership_id: String,
+                box_collaboration_id: String
             }
         ],
         goals: [

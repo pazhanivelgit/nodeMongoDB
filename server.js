@@ -8,11 +8,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
+var logger = require("./public/logger");
 
 /**
  * init
  */
-var routes = require('./routes/routes2.js');
+var routes = require('./routes/routes.js');
 var http_server = express();
 
 
@@ -24,7 +25,10 @@ var http_server = express();
 http_server.disable('x-powered-by');
 http_server.enable('etag', 'strict');
 http_server.use(bodyParser.json());
-http_server.use(morgan('dev'));
+//http_server.use(morgan('dev'));
+logger.debug("Overriding 'Express' logger");
+http_server.use(require('morgan')({ "stream": logger.stream }));
+
 //http_server.use(express.urlencoded());
 //http_server.use(http_server.router);
 
@@ -46,7 +50,10 @@ http_server.use(function (err, req, res, next) {
 /**
  * instantiate express server
  */
-http_server.listen(8080, function () {
+
+var port=process.env.PORT ||8080;
+
+http_server.listen(port, function () {
     'use strict';
-    console.log('Express server listening on port 3000');
+    console.log('Express server listening on port-'+ port);
 });
